@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NAICS, PSC, FSC Code Search</title>
+    <title>Public Firm Code Search</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
-            padding: 20px;
+            padding: 0;
+            margin: 0;
         }
 
         #error {
@@ -28,6 +29,7 @@
 
         .form-control {
             margin-bottom: 10px;
+            margin-top: 25px;
         }
 
         .controls-row {
@@ -43,22 +45,49 @@
             align-items: center;
             gap: 5px;
         }
+
+        .headerBackground {
+            background-color: #d22727;
+            width: 100%;
+            padding: 20px 0;
+            margin: 0;
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+
+        .headerBackground h1 {
+            color: white;
+            margin: 0;
+        }
+
+        .container {
+            padding-top: 20px;
+        }
+        .search{
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        .search button{
+            width: 100px;
+            margin-left: 45%;
+            margin-top: 25px;
+        }
     </style>
 </head>
+
 <body>
+    <nav class="headerBackground">
+        <h1 class="text-center">Public Firm Code Search</h1>
+        <div class="row search">
+            <input id="searchTerm" class="form-control"
+            placeholder="Enter code or description (e.g., 23, warehousing)" type="text">
+            <button type="button" class="btn btn-light" onclick="search()">Search</button>
+        </div>
+    </nav>
+
     <div class="container">
-        <div class="row">
-            <h1 class="text-center mb-4">NAICS, PSC, FSC Code Search</h1>
-        </div>
-        <div class="row">
-            <a target="_blank" style="text-align: center;" href="https://www.wh1.com/industries/government/naics-codes/">Source For These Codes</a>
-        </div>
-        <div class="row">
-            <div class="col">
-                <input id="searchTerm" class="form-control"
-                    placeholder="Enter code or description (e.g., 23, warehousing)" type="text">
-            </div>
-        </div>
         <div class="row">
             <div class="col-12">
                 <div class="controls-row">
@@ -66,7 +95,7 @@
                         <input id="caseSensitiveCheckBox" type="checkbox" class="form-check-input">
                         <label for="caseSensitiveCheckBox" class="form-check-label">Case Sensitive</label>
                     </div>
-                    <button type="button" class="btn btn-success" onclick="search()">Search</button>
+                
                 </div>
             </div>
         </div>
@@ -75,9 +104,9 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Code</th>
-                        <th>Type</th>
-                        <th>Description</th>
+                        <th>FIRMS Code</th>
+                        <th>FIRMS Name</th>
+                        <th>Facility Type</th>
                     </tr>
                 </thead>
                 <tbody id="results-body"></tbody>
@@ -87,78 +116,45 @@
     </div>
 
     <script>
-        // Data set
-        const codes = [
-            { code: "236220", description: "Commercial and Institutional Building Construction", type: "NAICS" },
-            { code: "238290", description: "Other Building Equipment Contractors", type: "NAICS" },
-            { code: "238390", description: "Other Building Finishing Contractors", type: "NAICS" },
-            { code: "238990", description: "All Other Specialty Trade Contractors", type: "NAICS" },
-            { code: "321920", description: "Wood Container and Pallet Manufacturing", type: "NAICS" },
-            { code: "332114", description: "Custom Roll Forming", type: "NAICS" },
-            { code: "332311", description: "Prefabricated Metal Building and Component Manufacturing", type: "NAICS" },
-            { code: "332312", description: "Fabricated Structural Metal Manufacturing", type: "NAICS" },
-            { code: "332439", description: "Other Metal Container Manufacturing", type: "NAICS" },
-            { code: "332618", description: "Other Fabricated Wire Product Manufacturing", type: "NAICS" },
-            { code: "332999", description: "All Other Miscellaneous Fabricated Metal Product Manufacturing", type: "NAICS" },
-            { code: "333298", description: "All Other Industrial Machinery Manufacturing", type: "NAICS" },
-            { code: "333921", description: "Elevator and Moving Stairway Manufacturing", type: "NAICS" },
-            { code: "333922", description: "Conveyor and Conveying Equipment Manufacturing", type: "NAICS" },
-            { code: "333923", description: "Overhead Traveling Crane, Hoist, and Monorail System Manufacturing", type: "NAICS" },
-            { code: "333924", description: "Industrial Truck, Tractor, Trailer, and Stacker Machinery Manufacturing", type: "NAICS" },
-            { code: "333997", description: "Scale and Balance Manufacturing", type: "NAICS" },
-            { code: "333999", description: "All Other Miscellaneous General Purpose Machinery Manufacturing", type: "NAICS" },
-            { code: "335110", description: "Electric Lamp Bulb and Part Manufacturing", type: "NAICS" },
-            { code: "335121", description: "Residential Electric Lighting Fixture Manufacturing", type: "NAICS" },
-            { code: "335122", description: "Commercial, Industrial, and Institutional Electric Lighting Fixture Manufacturing", type: "NAICS" },
-            { code: "335129", description: "Other Lighting Equipment Manufacturing", type: "NAICS" },
-            { code: "335911", description: "Storage Battery Manufacturing", type: "NAICS" },
-            { code: "335912", description: "Primary Battery Manufacturing", type: "NAICS" },
-            { code: "335999", description: "All Other Miscellaneous Electrical Equipment and Component Manufacturing", type: "NAICS" },
-            { code: "336413", description: "Other Aircraft Parts and Auxiliary Equipment Manufacturing", type: "NAICS" },
-            { code: "336999", description: "All Other Transportation Equipment Manufacturing", type: "NAICS" },
-            { code: "337124", description: "Metal Household Furniture Manufacturing", type: "NAICS" },
-            { code: "337127", description: "Institutional Furniture Manufacturing", type: "NAICS" },
-            { code: "337211", description: "Wood Office Furniture Manufacturing", type: "NAICS" },
-            { code: "337214", description: "Office Furniture (except Wood) Manufacturing", type: "NAICS" },
-            { code: "337215", description: "Showcase, Partition, Shelving, and Locker Manufacturing", type: "NAICS" },
-            { code: "339999", description: "All Other Miscellaneous Manufacturing", type: "NAICS" },
-            { code: "423210", description: "Furniture Merchant Wholesalers", type: "NAICS" },
-            { code: "423310", description: "Lumber, Plywood, Millwork, and Wood Panel Merchant Wholesalers", type: "NAICS" },
-            { code: "423390", description: "Other Construction Material Merchant Wholesalers", type: "NAICS" },
-            { code: "423420", description: "Office Equipment Merchant Wholesalers", type: "NAICS" },
-            { code: "423440", description: "Other Commercial Equipment Merchant Wholesalers", type: "NAICS" },
-            { code: "423510", description: "Metal Service Centers and Other Metal Merchant Wholesalers", type: "NAICS" },
-            { code: "423710", description: "Hardware Merchant Wholesalers", type: "NAICS" },
-            { code: "423830", description: "Industrial Machinery and Equipment Merchant Wholesalers", type: "NAICS" },
-            { code: "423840", description: "Industrial Supplies Merchant Wholesalers", type: "NAICS" },
-            { code: "423850", description: "Service Establishment Equipment and Supplies Merchant Wholesalers", type: "NAICS" },
-            { code: "423860", description: "Transportation Equipment and Supplies (except Motor Vehicle) Merchant Wholesalers", type: "NAICS" },
-            { code: "423930", description: "Recyclable Material Merchant Wholesalers", type: "NAICS" },
-            { code: "423990", description: "Other Miscellaneous Durable Goods Merchant Wholesalers", type: "NAICS" },
-            { code: "424610", description: "Plastics Materials and Basic Forms and Shapes Merchant Wholesalers", type: "NAICS" },
-            { code: "444190", description: "Other Building Material Dealers", type: "NAICS" },
-            { code: "493110", description: "General Warehousing and Storage", type: "NAICS" },
-            { code: "493120", description: "Refrigerated Warehousing and Storage", type: "NAICS" },
-            { code: "493130", description: "Farm Product Warehousing and Storage", type: "NAICS" },
-            { code: "493190", description: "Other Warehousing and Storage", type: "NAICS" },
-            { code: "531190", description: "Lessors of Other Real Estate Property", type: "NAICS" },
-            { code: "532412", description: "Construction, Mining, and Forestry Machinery and Equipment Rental and Leasing", type: "NAICS" },
-            { code: "532420", description: "Office Machinery and Equipment Rental and Leasing", type: "NAICS" },
-            { code: "532490", description: "Other Commercial and Industrial Machinery and Equipment Rental and Leasing", type: "NAICS" },
-            { code: "541330", description: "Engineering Services", type: "NAICS" },
-            { code: "541420", description: "Industrial Design Services", type: "NAICS" },
-            { code: "541490", description: "Other Specialized Design Services", type: "NAICS" },
-            { code: "541614", description: "Process, Physical Distribution, and Logistics Consulting Services", type: "NAICS" },
-            { code: "541618", description: "Other Management Consulting Services", type: "NAICS" },
-            { code: "811310", description: "Commercial and Industrial Machinery and Equipment (except Automotive and Electronic) Repair and Maintenance", type: "NAICS" },
-            { code: "3990", description: "Miscellaneous Materials Handling Equipment", type: "PSC" },
-            { code: "3910", description: "Conveyors", type: "FSC" },
-            { code: "3920", description: "Material Handling Equipment, Nonself-Propelled", type: "FSC" },
-            { code: "3930", description: "Warehouse Trucks and Tractors, Self-Propelled", type: "FSC" },
-            { code: "3960", description: "Freight Elevators", type: "FSC" },
-            { code: "3990", description: "Miscellaneous Materials Handling Equipment", type: "FSC" },
-            { code: "7125", description: "Cabinets, Lockers, Bins, and Shelving", type: "FSC" }
-        ];
+        let codes = []; // Will store the CSV data
+
+        // Function to load CSV data
+        async function loadCSVData() {
+            try {
+                const response = await fetch('250507, Updated Firm Codes.csv');
+                const csvText = await response.text();
+                const rows = csvText.split('\n');
+                
+                // Find the start of actual data (after headers)
+                const dataStartIndex = rows.findIndex(row => row.includes('District Port Code,FIRMS Code,FIRMS Name'));
+                if (dataStartIndex === -1) {
+                    throw new Error('Could not find data headers in CSV');
+                }
+
+                // Skip header rows and process data
+                codes = rows.slice(dataStartIndex + 1).map(row => {
+                    const columns = row.split(',').map(field => field.trim());
+                    // Map columns based on CSV structure:
+                    // FIRMS Code is column 1
+                    // FIRMS Name is column 2
+                    // Facility Type Short Description is column 6
+                    return {
+                        code: columns[1] || '',
+                        name: columns[2] || '',
+                        type: columns[6] || ''
+                    };
+                }).filter(item => item.code && item.name && item.type); // Filter out empty rows
+                
+                console.log(`Loaded ${codes.length} codes from CSV`);
+            } catch (error) {
+                console.error('Error loading CSV:', error);
+                document.getElementById('error').textContent = 'Error loading data. Please refresh the page.';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // Load CSV data when page loads
+        loadCSVData();
 
         // Search function
         function search() {
@@ -190,8 +186,12 @@
                 // Create regex object
                 const regex = new RegExp(pattern, caseSensitive ? '' : 'i');
 
-                // Filter codes (default to searching both code and description)
-                const matches = codes.filter(item => regex.test(item.code) || regex.test(item.description));
+                // Filter codes (search in code, name, and type)
+                const matches = codes.filter(item => 
+                    regex.test(item.code) || 
+                    regex.test(item.name) || 
+                    regex.test(item.type)
+                );
 
                 // Display results
                 if (matches.length === 0) {
@@ -202,8 +202,8 @@
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${item.code}</td>
+                            <td>${item.name}</td>
                             <td>${item.type}</td>
-                            <td>${item.description}</td>
                         `;
                         resultsBody.appendChild(row);
                     });
