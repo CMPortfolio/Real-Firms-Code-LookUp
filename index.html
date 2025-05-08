@@ -6,6 +6,7 @@
     <title>Public Firm Code Search</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -16,6 +17,13 @@
         #error {
             margin-top: 10px;
             display: none;
+            color: red;
+        }
+
+        #loading {
+            margin-top: 10px;
+            display: none;
+            color: blue;
         }
 
         #results-info {
@@ -64,12 +72,12 @@
         .container {
             padding-top: 20px;
         }
-        .search{
+        .search {
             width: 50%;
             margin: 0 auto;
         }
 
-        .search button{
+        .search button {
             width: 100px;
             margin-left: 45%;
             margin-top: 25px;
@@ -82,7 +90,7 @@
         <h1 class="text-center">Public Firm Code Search</h1>
         <div class="row search">
             <input id="searchTerm" class="form-control"
-            placeholder="Enter code or description (e.g., 23, warehousing)" type="text">
+                placeholder="Enter code or description (e.g., 23, warehousing)" type="text">
             <button type="button" class="btn btn-light" onclick="search()">Search</button>
         </div>
     </nav>
@@ -95,10 +103,10 @@
                         <input id="caseSensitiveCheckBox" type="checkbox" class="form-check-input">
                         <label for="caseSensitiveCheckBox" class="form-check-label">Case Sensitive</label>
                     </div>
-                
                 </div>
             </div>
         </div>
+        <div id="loading">Loading data...</div>
         <div id="error"></div>
         <div class="row">
             <table class="table table-bordered">
@@ -107,6 +115,12 @@
                         <th>FIRMS Code</th>
                         <th>FIRMS Name</th>
                         <th>Facility Type</th>
+                        <th>Street Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Zip</th>
+                        <th>Country</th>
+                        <th>Facility House Number</th>
                     </tr>
                 </thead>
                 <tbody id="results-body"></tbody>
@@ -117,39 +131,64 @@
 
     <script>
         let codes = []; // Will store the CSV data
+        let isDataLoaded = false; // Track data loading status
+
+        // Function to clean text (remove extra whitespace, newlines)
+        function cleanText(text) {
+            return typeof text === 'string' ? text.replace(/\n/g, ' ').trim() : '';
+        }
 
         // Function to load CSV data
         async function loadCSVData() {
             try {
-                const response = await fetch('250507, Updated Firm Codes.csv');
-                const csvText = await response.text();
-                const rows = csvText.split('\n');
-                
-                // Find the start of actual data (after headers)
-                const dataStartIndex = rows.findIndex(row => row.includes('District Port Code,FIRMS Code,FIRMS Name'));
-                if (dataStartIndex === -1) {
-                    throw new Error('Could not find data headers in CSV');
-                }
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('error').style.display = 'none';
 
-                // Skip header rows and process data
-                codes = rows.slice(dataStartIndex + 1).map(row => {
-                    const columns = row.split(',').map(field => field.trim());
-                    // Map columns based on CSV structure:
-                    // FIRMS Code is column 1
-                    // FIRMS Name is column 2
-                    // Facility Type Short Description is column 6
-                    return {
-                        code: columns[1] || '',
-                        name: columns[2] || '',
-                        type: columns[6] || ''
-                    };
-                }).filter(item => item.code && item.name && item.type); // Filter out empty rows
-                
-                console.log(`Loaded ${codes.length} codes from CSV`);
+                const response = await fetch('250507, Updated Firm Codes.csv');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const csvText = await response.text();
+
+                Papa.parse(csvText, {
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        const rows = results.data;
+                        // Find the header row (more flexible matching)
+                        const dataStartIndex = rows.findIndex(row => row.join(',').includes('District Port Code,FIRMS Code,FIRMS Name'));
+                        if (dataStartIndex === -1) {
+                            throw new Error('Could not find data headers in CSV');
+                        }
+
+                        // Skip header rows and process data
+                        codes = rows.slice(dataStartIndex + 1).filter(row => row.join('').trim()).map(columns => {
+                            return {
+                                code: cleanText(columns[1]),
+                                name: cleanText(columns[2]),
+                                type: cleanText(columns[6]),
+                                address: cleanText(columns[9]),
+                                city: cleanText(columns[17]),
+                                state: cleanText(columns[18]),
+                                zip: cleanText(columns[19]),
+                                country: cleanText(columns[20]),
+                                housenumber: cleanText(columns[13])
+                            };
+                        }).filter(item => item.code && item.name && item.type);
+
+                        console.log(`Loaded ${codes.length} codes from CSV`, codes.slice(0, 2)); // Log first few entries
+                        isDataLoaded = true;
+                        document.getElementById('loading').style.display = 'none';
+                    },
+                    error: function(error) {
+                        throw new Error('PapaParse error: ' + error);
+                    }
+                });
             } catch (error) {
                 console.error('Error loading CSV:', error);
                 document.getElementById('error').textContent = 'Error loading data. Please refresh the page.';
                 document.getElementById('error').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+                isDataLoaded = false;
             }
         }
 
@@ -169,6 +208,13 @@
             errorDiv.style.display = 'none';
             resultsInfo.textContent = '';
 
+            // Check if data is loaded
+            if (!isDataLoaded) {
+                errorDiv.textContent = 'Data is still loading. Please wait.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
             // Validate input
             if (!searchTerm) {
                 errorDiv.textContent = 'Please enter a search term.';
@@ -180,17 +226,20 @@
                 // Escape special regex characters in the search term
                 const escapedTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-                // Build regex pattern (default to "contains")
-                const pattern = escapedTerm;
-
                 // Create regex object
-                const regex = new RegExp(pattern, caseSensitive ? '' : 'i');
+                const regex = new RegExp(escapedTerm, caseSensitive ? '' : 'i');
 
-                // Filter codes (search in code, name, and type)
-                const matches = codes.filter(item => 
-                    regex.test(item.code) || 
-                    regex.test(item.name) || 
-                    regex.test(item.type)
+                // Filter codes
+                const matches = codes.filter(item =>
+                    regex.test(item.code) ||
+                    regex.test(item.name) ||
+                    regex.test(item.type) ||
+                    regex.test(item.address) ||
+                    regex.test(item.city) ||
+                    regex.test(item.state) ||
+                    regex.test(item.zip) ||
+                    regex.test(item.country) ||
+                    regex.test(item.housenumber)
                 );
 
                 // Display results
@@ -204,6 +253,12 @@
                             <td>${item.code}</td>
                             <td>${item.name}</td>
                             <td>${item.type}</td>
+                            <td>${item.address}</td>
+                            <td>${item.city}</td>
+                            <td>${item.state}</td>
+                            <td>${item.zip}</td>
+                            <td>${item.country}</td>
+                            <td>${item.housenumber}</td>
                         `;
                         resultsBody.appendChild(row);
                     });
