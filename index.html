@@ -136,6 +136,145 @@
             margin: 0 auto;
         }
 
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .headerBackground {
+                padding: 6px 0 0 0;
+                min-height: unset;
+            }
+
+            .headerBackground .container {
+                padding: 0 5px;
+            }
+
+            .headerBackground .row {
+                margin: 0;
+            }
+
+            .headerBackground .col-md-4 {
+                padding: 0;
+                margin-bottom: 10px;
+            }
+
+            .img {
+                width: 120px;
+                max-height: 40px;
+            }
+
+            .headerBackground h1 {
+                font-size: 1rem;
+                margin: 4px 0 0 0;
+                padding: 0;
+            }
+
+            .btn.btn-light.btn-sm {
+                font-size: 0.7rem !important;
+                padding: 0.2rem 0.4rem !important;
+                margin-bottom: 4px;
+            }
+
+            .search-options {
+                margin: 8px 0;
+                padding: 8px;
+                border-radius: 4px;
+            }
+
+            .form-control, .form-select {
+                font-size: 15px;
+                margin-bottom: 6px;
+                padding: 6px 8px;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 6px;
+                padding: 7px 0;
+                font-size: 15px;
+            }
+
+            .clear-btn {
+                margin-left: 0;
+            }
+
+            /* Make table responsive */
+            .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                margin: 0;
+                padding: 0;
+            }
+
+            .table {
+                width: 900px; /* force horizontal scroll */
+                min-width: 900px;
+                font-size: 12px;
+                margin: 0;
+            }
+
+            .table th, .table td {
+                padding: 4px 6px;
+                white-space: nowrap;
+            }
+
+            /* Adjust search sections */
+            #generalSearchSection .row,
+            #specificSearchSection .row {
+                margin: 0;
+            }
+
+            #generalSearchSection .col-md-8,
+            #generalSearchSection .col-md-4,
+            #specificSearchSection .col-md-4 {
+                padding: 0 5px;
+                margin-bottom: 8px;
+            }
+
+            /* Stack buttons */
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .btn-group .btn {
+                margin-bottom: 5px;
+            }
+
+            /* Adjust export button */
+            #export-container {
+                margin: 10px 0;
+            }
+
+            #export-container .btn {
+                width: 100%;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .headerBackground h1 {
+                font-size: 1rem;
+            }
+
+            .table {
+                font-size: 12px;
+            }
+
+            .table th, .table td {
+                padding: 4px;
+            }
+
+            .form-control, .form-select {
+                font-size: 14px;
+            }
+        }
+
     </style>
 </head>
 
@@ -280,23 +419,25 @@
                         <i class="fas fa-download"></i> Export to CSV
                     </button>
                 </div>
-                <table class="table table-bordered table-striped">
-                    <thead></thead>
-                        <tr>
-                            <th>FIRMS Code</th>
-                            <th>FIRMS Name</th>
-                            <th>Facility Type</th>
-                            <th>Street Address</th>
-                            <th>City</th>
-                            <th>State</th>
-                            <th>Zip</th>
-                            <th>Country</th>
-                            <th>Facility House Number</th>
-                            <th>FIRMS Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="results-body"></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>FIRMS Code</th>
+                                <th>FIRMS Name</th>
+                                <th>Facility Type</th>
+                                <th>Street Address</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip</th>
+                                <th>Country</th>
+                                <th>Facility House Number</th>
+                                <th>FIRMS Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-body"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
