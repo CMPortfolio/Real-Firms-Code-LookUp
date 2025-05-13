@@ -356,12 +356,6 @@
                             <input id="countrySearch" class="form-control" type="text">
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="search-field">
-                            <label for="houseNumberSearch">House Number:</label>
-                            <input id="houseNumberSearch" class="form-control" type="text">
-                        </div>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
@@ -403,7 +397,6 @@
                                 <th>State</th>
                                 <th>Zip</th>
                                 <th>Country</th>
-                                <th>Facility House Number</th>
                                 <th>FIRMS Status</th>
                             </tr>
                         </thead>
@@ -467,7 +460,6 @@
                                 state: cleanText(columns[18]),
                                 zip: cleanText(columns[19]),
                                 country: cleanText(columns[20]),
-                                housenumber: cleanText(columns[13]),
                                 status: cleanText(columns[3])  // Adding FIRMS Status
                             };
                         }).filter(item => item.code && item.name && item.type);
@@ -520,7 +512,6 @@
             document.getElementById('stateSearch').value = '';
             document.getElementById('zipSearch').value = '';
             document.getElementById('countrySearch').value = '';
-            document.getElementById('houseNumberSearch').value = '';
             document.getElementById('statusSearch').value = '';
             
             // Clear results
@@ -580,8 +571,7 @@
                         regex.test(item.city) ||
                         regex.test(item.state) ||
                         regex.test(item.zip) ||
-                        regex.test(item.country) ||
-                        regex.test(item.housenumber)
+                        regex.test(item.country)
                     );
                 } else {
                     // Specific field search
@@ -593,12 +583,11 @@
                     const stateTerm = document.getElementById('stateSearch').value.trim();
                     const zipTerm = document.getElementById('zipSearch').value.trim();
                     const countryTerm = document.getElementById('countrySearch').value.trim();
-                    const houseNumberTerm = document.getElementById('houseNumberSearch').value.trim();
                     const statusTerm = document.getElementById('statusSearch').value.trim();
                     
                     // Check if at least one field has a value
                     if (!firmCodeTerm && !firmNameTerm && !facilityTypeTerm && !addressTerm && 
-                        !cityTerm && !stateTerm && !zipTerm && !countryTerm && !houseNumberTerm && !statusTerm) {
+                        !cityTerm && !stateTerm && !zipTerm && !countryTerm) {
                         errorDiv.textContent = 'Please enter at least one search criterion.';
                         errorDiv.style.display = 'block';
                         return;
@@ -613,7 +602,6 @@
                     const stateRegex = createRegex(stateTerm, caseSensitive);
                     const zipRegex = createRegex(zipTerm, caseSensitive);
                     const countryRegex = createRegex(countryTerm, caseSensitive);
-                    const houseNumberRegex = createRegex(houseNumberTerm, caseSensitive);
                     const statusRegex = createRegex(statusTerm, caseSensitive);
                     
                     // Filter codes based on specific fields
@@ -626,7 +614,6 @@
                         (!stateRegex || stateRegex.test(item.state)) &&
                         (!zipRegex || zipRegex.test(item.zip)) &&
                         (!countryRegex || countryRegex.test(item.country)) &&
-                        (!houseNumberRegex || houseNumberRegex.test(item.housenumber)) &&
                         (!statusRegex || statusRegex.test(item.status))
                     );
                 }
@@ -650,7 +637,6 @@
                             <td>${item.state}</td>
                             <td>${item.zip}</td>
                             <td>${item.country}</td>
-                            <td>${item.housenumber}</td>
                             <td>${item.status}</td>
                         `;
                         resultsBody.appendChild(row);
@@ -672,7 +658,7 @@
         // Trigger search on Enter key for specific fields
         const specificFields = [
             'firmCodeSearch', 'firmNameSearch', 'facilityTypeSearch', 'addressSearch',
-            'citySearch', 'stateSearch', 'zipSearch', 'countrySearch', 'houseNumberSearch',
+            'citySearch', 'stateSearch', 'zipSearch', 'countrySearch',
             'statusSearch'
         ];
         
@@ -698,7 +684,6 @@
                 'State',
                 'Zip',
                 'Country',
-                'Facility House Number',
                 'FIRMS Status'
             ];
 
@@ -714,7 +699,6 @@
                     item.state,
                     item.zip,
                     item.country,
-                    item.housenumber,
                     item.status
                 ].map(field => `"${field || ''}"`).join(','))
             ];
