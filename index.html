@@ -68,9 +68,9 @@
         }
 
         .headerBackground {
-            background-color: #cf2a2a;
+            background-color: #AC162C;
             width: 100%;
-            padding: 20px 0;
+            padding: -5%;
             margin: 0;
             position: relative;
             top: 0;
@@ -134,6 +134,7 @@
             object-fit: contain;
             filter: brightness(0) invert(100%);
             margin: 0 auto;
+            margin-left: -65%;
         }
 
         /* Mobile-specific styles */
@@ -154,10 +155,7 @@
                 padding-left: 0;
                 padding-right: 0;
             }
-            .img {
-                width: 120px;
-                max-height: 40px;
-            }
+        
             .headerBackground .row {
                 flex-direction: column !important;
                 align-items: center !important;
@@ -254,18 +252,20 @@
             padding-left: 15%;
             padding-right: 0;
         }
-
+#header-text {
+    margin-left: -25%;
+}
     </style>
 </head>
 
 <body>
-    <nav class="headerBackground">
+    <nav marg class="headerBackground">
         <div id="header" class="container">
             <div class="row align-items-center">
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <img class="img" src="https://linstol.com/wp-content/uploads/2023/09/Linstol-Logo-web.png" alt="Linstol Logo">
                 </div>
-                <div class="col-md-4 text-center">
+                <div id="header-text" class="col-md-6 text-left">
                     <h1 class="mb-0"><b>Public FIRMS Code Search</b></h1>
                 </div>
                 <div class="col-md-4 text-end">
