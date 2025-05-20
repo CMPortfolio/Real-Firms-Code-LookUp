@@ -182,7 +182,20 @@
                     <div class="col-md-4">
                         <div class="search-field">
                             <label for="facilityTypeSearch">Facility Type:</label>
-                            <input id="facilityTypeSearch" class="form-control" type="text" placeholder="Bonded">
+                            <select id="facilityTypeSearch" class="form-control">
+                                <option value=""></option>
+                                <option value="Bonded Warehouse">Bonded Warehouse</option>
+                                <option value="Bridge">Bridge</option>
+                                <option value="CES">CES</option>
+                                <option value="Customs Administrative Site">Customs Administrative Site</option>
+                                <option value="Customs Container Station">Customs Container Station</option>
+                                <option value="Data Processing Site">Data Processing Site</option>
+                                <option value="Foreign Trade Zone">Foreign Trade Zone</option>
+                                <option value="Importer Premises">Importer Premises</option>
+                                <option value="Inspection Facility">Inspection Facility</option>
+                                <option value="Multi-Use-Bonded">Multi-Use-Bonded</option>
+                                <option value="Pier">Pier</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -224,7 +237,12 @@
                     <div class="col-md-4">
                         <div class="search-field">
                             <label for="statusSearch">FIRMS Status:</label>
-                            <input id="statusSearch" class="form-control" type="text" placeholder="Active">
+                            <select id="statusSearch" class="form-control">
+                                <option value=""></option>
+                                <option value="ACTIVE">Active</option>
+                                <option value="DEACTIVATED">Deactivated</option>
+                                <option value="ACTIVATED">Activated</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -309,6 +327,10 @@
                                 status: cleanText(columns[3])
                             }))
                             .filter(item => item.code && item.name && item.type);
+
+                        // Log unique status values to help debug
+                        const uniqueStatuses = [...new Set(codes.map(item => item.status))];
+                        console.log('Unique status values in CSV:', uniqueStatuses);
 
                         isDataLoaded = true;
                         document.getElementById('loading').style.display = 'none';
