@@ -4,81 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Public FIRMS Code Search</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link href="https://fonts.cdnfonts.com/css/gilroy-bold" rel="stylesheet">
     <style>
         body {
             font-family: 'Gilroy', sans-serif;
-            padding: 0;
             margin: 0;
-        }
-
-        h1, h2, h3, h4, h5, h6, .search-field label, .form-select, #searchMode {
-            font-family: 'Gilroy-Bold', sans-serif;
-            font-weight: bold;
-        }
-
-        .table thead th {
-            font-family: 'Gilroy-Bold', sans-serif;
-            font-weight: bold;
-        }
-
-        .btn {
-            font-family: 'Gilroy', sans-serif;
-        }
-
-        #results-info {
-            font-family: 'Gilroy', sans-serif;
-        }
-
-        #error {
-            margin-top: 10px;
-            display: none;
-            color: red;
-        }
-
-        #loading {
-            margin-top: 10px;
-            display: none;
-            color: blue;
-        }
-
-        .table {
-            margin-top: 20px;
-        }
-
-        .form-control {
-            margin-bottom: 10px;
-        }
-
-        .controls-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            margin-top: 10px;
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
         .headerBackground {
             background-color: #AC162C;
             width: 100%;
-            padding: -5%;
-            margin: 0;
-            position: relative;
-            top: 0;
-            left: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            padding: 1rem 0;
         }
 
         .headerBackground h1 {
@@ -86,176 +24,93 @@
             margin: 0;
         }
 
-        .container {
-            padding-top: 20px;
-        }
-        
-        .search {
-            width: 70%;
-            margin: 0 auto;
-        }
-
-        .search button {
-            width: 100px;
-            margin-top: 10px;
-        }
-        
-        .search-options {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-        
-        .search-field {
-            margin-bottom: 10px;
-        }
-        
-        .search-field label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .form-select {
-            margin-bottom: 10px;
-        }
-        
-        #searchMode {
-            margin-bottom: 15px;
-        }
-        
-        .clear-btn {
-            margin-left: 10px;
-        }
-
         .img {
             width: 300px;
-            height: 100px;
+            height: 25px;
             object-fit: contain;
-            margin: 0 auto;
-            margin-left: -65%;
         }
 
-        /* Mobile-specific styles */
-        @media (max-width: 768px) {
-            html, body {
-                width: 100%;
-                overflow-x: hidden;
-            }
-            .container {
-                padding: 5px;
-                width: 100%;
-                max-width: 100%;
-            }
-            .headerBackground, .headerBackground .container, .headerBackground .row, .headerBackground .col-12, .headerBackground .col-md-4 {
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 auto;
-                padding-left: 0;
-                padding-right: 0;
-            
-            }
-        
-            .headerBackground .row {
-                flex-direction: column !important;
-                align-items: center !important;
-                text-align: center !important;
-            }
-            .headerBackground h1 {
-                font-size: 1.35rem;
-                margin: 4px 0 0 0;
-                padding: 0;
-                width: 100%;
-                text-align: center;
-            }
-            .btn.btn-light.btn-sm {
-                font-size: 0.6rem !important;
-                padding: 0.15rem 0.3rem !important;
-                margin-bottom: 4px;
-                min-width: 0;
-                width: auto;
-                line-height: 1.1;
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .search-options {
-                margin: 8px 0;
-                padding: 8px;
-                border-radius: 4px;
-                width: 100%;
-                max-width: 100%;
-            }
-            .form-control, .form-select {
-                font-size: 15px;
-                margin-bottom: 6px;
-                padding: 6px 8px;
-                width: 100%;
-                box-sizing: border-box;
-            }
-            .btn {
-                width: 100%;
-                margin-bottom: 6px;
-                padding: 7px 0;
-                font-size: 15px;
-            }
-            .clear-btn {
-                margin-left: 0;
-            }
-            /* Table responsiveness */
-            .table-responsive {
-                width: 100vw;
-                margin-left: -5vw;
-                left: 0;
-                position: relative;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                padding: 0;
-            }
-            .table {
-                min-width: 900px;
-                font-size: 12px;
-                margin: 0;
-            }
-            .table th, .table td {
-                padding: 4px 6px;
-                white-space: nowrap;
-            }
-            #export-container .btn {
-                width: 100%;
-            }
+        .search-options {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
         }
 
-        /* Extra small devices */
-        @media (max-width: 480px) {
-            .headerBackground h1 {
-                font-size: 1rem;
-            }
-
-            .table {
-                font-size: 12px;
-            }
-
-            .table th, .table td {
-                padding: 4px;
-            }
-
-            .form-control, .form-select {
-                font-size: 14px;
-            }
+        .search-field {
+            margin-bottom: 0.5rem;
         }
+
+        .search-field label {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        #error, #loading {
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        #error { color: red; }
+        #loading { color: blue; }
 
         #disclaimer {
-            font-size: 12px;
+            font-size: 0.75rem;
         }
-        #header {
-            padding-left: 0;
-            padding-right: 0;
-        }
-#header-text {
-    margin-left: -25%;
-}
 
+        input::placeholder {
+            color: #cac7c7;
+            opacity: 1;
+        }
+
+        .form-control::placeholder {
+            color: #cac7c7;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .headerBackground .row {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .headerBackground h1 {
+                font-size: 1.35rem;
+                margin: 0.5rem 0;
+            }
+
+            .img {
+                margin: 0 auto;
+            }
+
+            .table-responsive {
+                width: 100vw;
+                margin-left: -0.5rem;
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 900px;
+                font-size: 0.75rem;
+            }
+
+            .table th, .table td {
+                padding: 0.25rem;
+                white-space: nowrap;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -263,8 +118,8 @@
     <nav marg class="headerBackground">
         <div id="header" class="container">
             <div class="row align-items-center">
-                <div class="col-md-5">
-                    <img class="img" src="https://linstol.com/wp-content/uploads/2023/09/Linstol-Logo-web.png" alt="Linstol Logo">
+                <div style="margin-left: -130px;" class="col-md-5">
+                    <img class="img" src="./Linstol Logo Wordmark White.png" alt="Linstol Logo">
                 </div>
                 <div id="header-text" class="col-md-6 text-left">
                     <h1 class="mb-0"><b>Public FIRMS Code Search</b></h1>
@@ -314,19 +169,20 @@
                     <div class="col-md-4">
                         <div class="search-field">
                             <label for="firmCodeSearch">FIRMS Code:</label>
-                            <input id="firmCodeSearch" class="form-control" type="text">
+                            <input id="firmCodeSearch" class="form-control" type="text" placeholder="C556">
+                            
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="search-field">
                             <label for="firmNameSearch">FIRMS Name:</label>
-                            <input id="firmNameSearch" class="form-control" type="text">
+                            <input id="firmNameSearch" class="form-control" type="text" placeholder="Michael Lewis">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="search-field">
                             <label for="facilityTypeSearch">Facility Type:</label>
-                            <input id="facilityTypeSearch" class="form-control" type="text">
+                            <input id="facilityTypeSearch" class="form-control" type="text" placeholder="Bonded">
                         </div>
                     </div>
                 </div>
@@ -346,7 +202,7 @@
                     <div class="col-md-4">
                         <div class="search-field">
                             <label for="stateSearch">State:</label>
-                            <input id="stateSearch" class="form-control" type="text">
+                            <input id="stateSearch" class="form-control" type="text" placeholder="CA">
                         </div>
                     </div>
                 </div>
@@ -368,7 +224,7 @@
                     <div class="col-md-4">
                         <div class="search-field">
                             <label for="statusSearch">FIRMS Status:</label>
-                            <input id="statusSearch" class="form-control" type="text">
+                            <input id="statusSearch" class="form-control" type="text" placeholder="Active">
                         </div>
                     </div>
                 </div>
@@ -415,42 +271,33 @@
     </div>
 
     <script>
-        let codes = []; // Will store the CSV data
-        let isDataLoaded = false; // Track data loading status
-        let currentMatches = []; // Store current search results
+        let codes = [];
+        let isDataLoaded = false;
+        let currentMatches = [];
 
-    
-
-        // Function to clean text (remove extra whitespace, newlines)
         function cleanText(text) {
             return typeof text === 'string' ? text.replace(/\n/g, ' ').trim() : '';
         }
 
-        // Function to load CSV data
         async function loadCSVData() {
             try {
                 document.getElementById('loading').style.display = 'block';
                 document.getElementById('error').style.display = 'none';
 
                 const response = await fetch('250507, Updated Firm Codes.csv');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                
                 const csvText = await response.text();
-
                 Papa.parse(csvText, {
                     skipEmptyLines: true,
                     complete: function(results) {
                         const rows = results.data;
-                        // Find the header row (more flexible matching)
                         const dataStartIndex = rows.findIndex(row => row.join(',').includes('District Port Code,FIRMS Code,FIRMS Name'));
-                        if (dataStartIndex === -1) {
-                            throw new Error('Could not find data headers in CSV');
-                        }
+                        if (dataStartIndex === -1) throw new Error('Could not find data headers in CSV');
 
-                        // Skip header rows and process data
-                        codes = rows.slice(dataStartIndex + 1).filter(row => row.join('').trim()).map(columns => {
-                            return {
+                        codes = rows.slice(dataStartIndex + 1)
+                            .filter(row => row.join('').trim())
+                            .map(columns => ({
                                 code: cleanText(columns[1]),
                                 name: cleanText(columns[2]),
                                 type: cleanText(columns[6]),
@@ -459,11 +306,10 @@
                                 state: cleanText(columns[18]),
                                 zip: cleanText(columns[19]),
                                 country: cleanText(columns[20]),
-                                status: cleanText(columns[3])  // Adding FIRMS Status
-                            };
-                        }).filter(item => item.code && item.name && item.type);
+                                status: cleanText(columns[3])
+                            }))
+                            .filter(item => item.code && item.name && item.type);
 
-                        console.log(`Loaded ${codes.length} codes from CSV`, codes.slice(0, 2)); // Log first few entries
                         isDataLoaded = true;
                         document.getElementById('loading').style.display = 'none';
                     },
@@ -472,7 +318,6 @@
                     }
                 });
             } catch (error) {
-                console.error('Error loading CSV:', error);
                 document.getElementById('error').textContent = 'Error loading data. Please refresh the page.';
                 document.getElementById('error').style.display = 'block';
                 document.getElementById('loading').style.display = 'none';
@@ -480,53 +325,11 @@
             }
         }
 
-        // Load CSV data when page loads
-        loadCSVData();
-
-        // Toggle search mode
-        document.getElementById('searchMode').addEventListener('change', function() {
-            const generalSection = document.getElementById('generalSearchSection');
-            const specificSection = document.getElementById('specificSearchSection');
-            
-            if (this.value === 'general') {
-                generalSection.style.display = 'block';
-                specificSection.style.display = 'none';
-            } else {
-                generalSection.style.display = 'none';
-                specificSection.style.display = 'block';
-            }
-        });
-
-        // Clear search fields
-        function clearSearch() {
-            // Clear general search
-            document.getElementById('generalSearchTerm').value = '';
-            
-            // Clear specific search fields
-            document.getElementById('firmCodeSearch').value = '';
-            document.getElementById('firmNameSearch').value = '';
-            document.getElementById('facilityTypeSearch').value = '';
-            document.getElementById('addressSearch').value = '';
-            document.getElementById('citySearch').value = '';
-            document.getElementById('stateSearch').value = '';
-            document.getElementById('zipSearch').value = '';
-            document.getElementById('countrySearch').value = '';
-            document.getElementById('statusSearch').value = '';
-            
-            // Clear results
-            document.getElementById('results-body').innerHTML = '';
-            document.getElementById('results-info').textContent = '';
-            document.getElementById('error').style.display = 'none';
-        }
-
-        // Create regex for search
         function createRegex(term, caseSensitive) {
             if (!term) return null;
-            const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            return new RegExp(escapedTerm, caseSensitive ? '' : 'i');
+            return new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), caseSensitive ? '' : 'i');
         }
 
-        // Search function
         function search() {
             const searchMode = document.getElementById('searchMode').value;
             const caseSensitive = document.getElementById('caseSensitiveCheckBox').checked;
@@ -534,12 +337,10 @@
             const errorDiv = document.getElementById('error');
             const resultsInfo = document.getElementById('results-info');
 
-            // Clear previous results and errors
             resultsBody.innerHTML = '';
             errorDiv.style.display = 'none';
             resultsInfo.textContent = '';
 
-            // Check if data is loaded
             if (!isDataLoaded) {
                 errorDiv.textContent = 'Data is still loading. Please wait.';
                 errorDiv.style.display = 'block';
@@ -550,10 +351,7 @@
                 let matches = [];
                 
                 if (searchMode === 'general') {
-                    // General search across all fields
                     const searchTerm = document.getElementById('generalSearchTerm').value.trim();
-                    
-                    // Validate input
                     if (!searchTerm) {
                         errorDiv.textContent = 'Please enter a search term.';
                         errorDiv.style.display = 'block';
@@ -561,68 +359,50 @@
                     }
                     
                     const regex = createRegex(searchTerm, caseSensitive);
-                    
-                    matches = codes.filter(item =>
-                        regex.test(item.code) ||
-                        regex.test(item.name) ||
-                        regex.test(item.type) ||
-                        regex.test(item.address) ||
-                        regex.test(item.city) ||
-                        regex.test(item.state) ||
-                        regex.test(item.zip) ||
-                        regex.test(item.country)
+                    matches = codes.filter(item => 
+                        Object.values(item).some(value => regex.test(value))
                     );
                 } else {
-                    // Specific field search
-                    const firmCodeTerm = document.getElementById('firmCodeSearch').value.trim();
-                    const firmNameTerm = document.getElementById('firmNameSearch').value.trim();
-                    const facilityTypeTerm = document.getElementById('facilityTypeSearch').value.trim();
-                    const addressTerm = document.getElementById('addressSearch').value.trim();
-                    const cityTerm = document.getElementById('citySearch').value.trim();
-                    const stateTerm = document.getElementById('stateSearch').value.trim();
-                    const zipTerm = document.getElementById('zipSearch').value.trim();
-                    const countryTerm = document.getElementById('countrySearch').value.trim();
-                    const statusTerm = document.getElementById('statusSearch').value.trim();
-                    
-                    // Check if at least one field has a value
-                    if (!firmCodeTerm && !firmNameTerm && !facilityTypeTerm && !addressTerm && 
-                        !cityTerm && !stateTerm && !zipTerm && !countryTerm) {
+                    const fields = {
+                        code: 'firmCodeSearch',
+                        name: 'firmNameSearch',
+                        type: 'facilityTypeSearch',
+                        address: 'addressSearch',
+                        city: 'citySearch',
+                        state: 'stateSearch',
+                        zip: 'zipSearch',
+                        country: 'countrySearch',
+                        status: 'statusSearch'
+                    };
+
+                    const hasSearchTerm = Object.values(fields).some(field => 
+                        document.getElementById(field).value.trim()
+                    );
+
+                    if (!hasSearchTerm) {
                         errorDiv.textContent = 'Please enter at least one search criterion.';
                         errorDiv.style.display = 'block';
                         return;
                     }
-                    
-                    // Create regex patterns for each field
-                    const codeRegex = createRegex(firmCodeTerm, caseSensitive);
-                    const nameRegex = createRegex(firmNameTerm, caseSensitive);
-                    const typeRegex = createRegex(facilityTypeTerm, caseSensitive);
-                    const addressRegex = createRegex(addressTerm, caseSensitive);
-                    const cityRegex = createRegex(cityTerm, caseSensitive);
-                    const stateRegex = createRegex(stateTerm, caseSensitive);
-                    const zipRegex = createRegex(zipTerm, caseSensitive);
-                    const countryRegex = createRegex(countryTerm, caseSensitive);
-                    const statusRegex = createRegex(statusTerm, caseSensitive);
-                    
-                    // Filter codes based on specific fields
+
+                    const regexes = Object.entries(fields).reduce((acc, [key, field]) => {
+                        const term = document.getElementById(field).value.trim();
+                        acc[key] = term ? createRegex(term, caseSensitive) : null;
+                        return acc;
+                    }, {});
+
                     matches = codes.filter(item =>
-                        (!codeRegex || codeRegex.test(item.code)) &&
-                        (!nameRegex || nameRegex.test(item.name)) &&
-                        (!typeRegex || typeRegex.test(item.type)) &&
-                        (!addressRegex || addressRegex.test(item.address)) &&
-                        (!cityRegex || cityRegex.test(item.city)) &&
-                        (!stateRegex || stateRegex.test(item.state)) &&
-                        (!zipRegex || zipRegex.test(item.zip)) &&
-                        (!countryRegex || countryRegex.test(item.country)) &&
-                        (!statusRegex || statusRegex.test(item.status))
+                        Object.entries(regexes).every(([key, regex]) => 
+                            !regex || regex.test(item[key])
+                        )
                     );
                 }
 
-                // Display results
+                currentMatches = matches;
                 if (matches.length === 0) {
                     resultsInfo.textContent = 'No matches found.';
                     document.getElementById('export-container').style.display = 'none';
                 } else {
-                    currentMatches = matches; // Store current matches for export
                     resultsInfo.textContent = `Found ${matches.length} match${matches.length === 1 ? '' : 'es'}.`;
                     document.getElementById('export-container').style.display = 'block';
                     matches.forEach(item => {
@@ -647,75 +427,60 @@
             }
         }
 
-        // Trigger search on Enter key for general search
-        document.getElementById('generalSearchTerm').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                search();
-            }
-        });
-        
-        // Trigger search on Enter key for specific fields
-        const specificFields = [
-            'firmCodeSearch', 'firmNameSearch', 'facilityTypeSearch', 'addressSearch',
-            'citySearch', 'stateSearch', 'zipSearch', 'countrySearch',
-            'statusSearch'
-        ];
-        
-        specificFields.forEach(fieldId => {
-            document.getElementById(fieldId).addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    search();
-                }
+        function clearSearch() {
+            ['generalSearchTerm', 'firmCodeSearch', 'firmNameSearch', 'facilityTypeSearch', 
+             'addressSearch', 'citySearch', 'stateSearch', 'zipSearch', 'countrySearch', 
+             'statusSearch'].forEach(id => {
+                document.getElementById(id).value = '';
             });
-        });
+            
+            document.getElementById('results-body').innerHTML = '';
+            document.getElementById('results-info').textContent = '';
+            document.getElementById('error').style.display = 'none';
+        }
 
-        // Function to export current results to CSV
         function exportToCSV() {
             if (currentMatches.length === 0) return;
 
-            // Create CSV header
-            const headers = [
-                'FIRMS Code',
-                'FIRMS Name',
-                'Facility Type',
-                'Street Address',
-                'City',
-                'State',
-                'Zip',
-                'Country',
-                'FIRMS Status'
-            ];
-
-            // Create CSV rows
+            const headers = ['FIRMS Code', 'FIRMS Name', 'Facility Type', 'Street Address', 
+                            'City', 'State', 'Zip', 'Country', 'FIRMS Status'];
             const csvRows = [
                 headers.join(','),
-                ...currentMatches.map(item => [
-                    item.code,
-                    item.name,
-                    item.type,
-                    item.address,
-                    item.city,
-                    item.state,
-                    item.zip,
-                    item.country,
-                    item.status
-                ].map(field => `"${field || ''}"`).join(','))
+                ...currentMatches.map(item => 
+                    [item.code, item.name, item.type, item.address, item.city, 
+                     item.state, item.zip, item.country, item.status]
+                    .map(field => `"${field || ''}"`).join(',')
+                )
             ];
 
-            // Create and download CSV file
-            const csvContent = csvRows.join('\n');
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            
-            link.setAttribute('href', url);
-            link.setAttribute('download', `firms_search_results_${new Date().toISOString().split('T')[0]}.csv`);
+            link.href = URL.createObjectURL(blob);
+            link.download = `firms_search_results_${new Date().toISOString().split('T')[0]}.csv`;
             link.style.visibility = 'hidden';
-            
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
+
+        // Event Listeners
+        document.getElementById('searchMode').addEventListener('change', function() {
+            const generalSection = document.getElementById('generalSearchSection');
+            const specificSection = document.getElementById('specificSearchSection');
+            generalSection.style.display = this.value === 'general' ? 'block' : 'none';
+            specificSection.style.display = this.value === 'general' ? 'none' : 'block';
+        });
+
+        ['generalSearchTerm', 'firmCodeSearch', 'firmNameSearch', 'facilityTypeSearch', 
+         'addressSearch', 'citySearch', 'stateSearch', 'zipSearch', 'countrySearch', 
+         'statusSearch'].forEach(id => {
+            document.getElementById(id).addEventListener('keypress', e => {
+                if (e.key === 'Enter') search();
+            });
+        });
+
+        // Initialize
+        loadCSVData();
     </script>
 </body>
 <footer class="mt-4">
@@ -735,4 +500,5 @@
 </footer>
 
 </html>
+
 
